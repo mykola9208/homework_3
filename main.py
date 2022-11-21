@@ -1,28 +1,32 @@
 import random
 
 
-def retry(attempts=3, desired_value=None):
+def retry(attempts=5, desired_value=None):
     def wrapper(func):
-        nonlocal attempts
-        nonlocal desired_value
-        val = func()
-        if attempts < 1:
-            print('desired value was not achieved')
-            return
-        elif val == desired_value:
-            print('desired value is ', val)
-            return
-        else:
-            attempts -= 1
-            return wrapper(func)
+        def inner_wrapper(*args):
+            nonlocal attempts
+            nonlocal desired_value
+            val = func(*args)
+            if attempts < 1:
+                print('desired value was not achieved')
+                return
+            elif val == desired_value:
+                print('desired value is ', val)
+                return
+            else:
+                attempts -= 1
+                return inner_wrapper(*args)
+        return inner_wrapper
     return wrapper
 
 
+@retry(attempts=5, desired_value=3)
 def get_random_value():
     return random.choice((1, 2, 3, 4, 5))
 
 
-def get_random_values(choices=[1, 2, 3, 4], size=2):
+@retry(attempts=5, desired_value=[2])
+def get_random_values(choices, size=2):
     return random.choices(choices, k=size)
 
 
@@ -37,4 +41,8 @@ def print_square(n):
         print('*')
     else:
         print('*' * (n-1) + inner_space(n-1) * (n-2) + '*\n*' + '*' * (n-1))
+
+
+if __name__ == '__main__':
+    get_random_value()
 
