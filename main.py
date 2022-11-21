@@ -3,10 +3,10 @@ import random
 
 def retry(attempts=5, desired_value=None):
     def wrapper(func):
-        def inner_wrapper(*args):
+        def inner_wrapper(*args, **kwargs):
             nonlocal attempts
             nonlocal desired_value
-            val = func(*args)
+            val = func(*args, **kwargs)
             if attempts < 1:
                 print('desired value was not achieved')
                 return
@@ -14,8 +14,9 @@ def retry(attempts=5, desired_value=None):
                 print('desired value is ', val)
                 return
             else:
+                print(val)
                 attempts -= 1
-                return inner_wrapper(*args)
+                return inner_wrapper(*args, **kwargs)
         return inner_wrapper
     return wrapper
 
@@ -44,5 +45,5 @@ def print_square(n):
 
 
 if __name__ == '__main__':
-    get_random_value()
+    get_random_values(choices=[1, 2, 3, 4], size=2)
 
