@@ -14,7 +14,6 @@ def retry(attempts=5, desired_value=None):
                 print('desired value is ', val)
                 return
             else:
-                print(val)
                 attempts -= 1
                 return inner_wrapper(*args, **kwargs)
         return inner_wrapper
@@ -45,5 +44,5 @@ def print_square(n):
 
 
 if __name__ == '__main__':
-    get_random_values(choices=[1, 2, 3, 4], size=2)
+    get_random_values([1, 2, 3, 4], 1)
 
